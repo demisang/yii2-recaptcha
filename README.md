@@ -41,7 +41,7 @@ return [
 In the form:
 ```php
 $form->field($model, 'captcha', ['enableAjaxValidation' => false])->label(false)
-    ->widget('demi\recaptcha\ReCaptcha', ['siteKey' => Yii::$app->params['reCAPTCHA.siteKey']) ?>
+    ->widget('demi\recaptcha\ReCaptcha', ['siteKey' => Yii::$app->params['reCAPTCHA.siteKey']]) ?>
 ```
 
 In the model validation rules:
