@@ -94,26 +94,26 @@ JS
 
         $options = Json::encode($gCaptchaParams);
 
-        // Append new captcha widget info
-        $view->registerJs(<<<JS
-$.extend(reCaptchaWidgets, {
-    '$id': $options
-});
-JS
-        );
-
         // Directly creating captcha widgets.
         // This code placed only one time irrespective of count of captcha-widgets
         $view->registerJs(<<<JS
 if (typeof (renderReCaptchaCallback) === "undefined") {
     var reCaptchaWidgets = {};
     var renderReCaptchaCallback = function() {
-        jQuery.each(reCaptchaWidgets, function(widgetId, widgetOptions) {
-            grecaptcha.render(document.getElementById(widgetId), widgetOptions);
-        });
+        for (var widgetId in reCaptchaWidgets) {
+            if (reCaptchaWidgets.hasOwnProperty(widgetId)) {
+                grecaptcha.render(document.getElementById(widgetId), reCaptchaWidgets[widgetId]);
+            }
+        }
     };
 }
 JS
-            , View::POS_END, 'renderReCaptchaCallbackFunction');
+            , View::POS_HEAD, 'renderReCaptchaCallbackFunction');
+
+        // Append new captcha widget info
+        $view->registerJs(<<<JS
+reCaptchaWidgets.$id = $options;
+JS
+            , View::POS_HEAD);
     }
 }
